@@ -39,7 +39,6 @@
     echo 1 of 9
     echo Cleaning up unneeded files.
     cleanmgr /sagerun:1
-    echo.
 
             CALL :ProgressMeter 1
             CALL :ProgressMeter 2
@@ -61,7 +60,6 @@
     echo 2 of 9
     echo Adding GlobalProtect prelogon to registry
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup\PreLogonState" /v ConnectedGateway /t REG_SZ /d prelogon.eg.secure-connect.psu.edu /f
-    echo.
 
         timeout /t 3 /nobreak > nul
             CALL :ProgressMeter 10
@@ -86,7 +84,6 @@
     echo 3 of 9
     echo Setting GlobalProtect logon state to 0
     reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Palo Alto Networks\GlobalProtect\PanSetup\PreLogonState" /v LogonState /t REG_SZ /d 0 /f
-    echo.
 
         timeout /t 3 /nobreak > nul
             CALL :ProgressMeter 21
@@ -109,7 +106,6 @@
     echo 4 of 9
     echo Disabling Hibernation.
     powercfg -h off
-    echo.
 
         timeout /t 3 /nobreak > nul
             CALL :ProgressMeter 31
@@ -197,7 +193,6 @@
     echo 8 of 9
     echo Setting screen timeout to 1 hour when plugged into power.
     powercfg /change monitor-timeout-ac 60
-    echo.
 
         timeout /t 3 /nobreak > nul
             CALL :ProgressMeter 71
@@ -220,7 +215,6 @@
     echo 9 of 9
     echo Updating group policy.
     gpupdate /force
-    echo.
 
         
             CALL :ProgressMeter 81
@@ -234,7 +228,6 @@
             CALL :ProgressMeter 89
             CALL :ProgressMeter 90
         timeout /t 3 /nobreak > nul  
-    cls
 
     echo.
     echo.
