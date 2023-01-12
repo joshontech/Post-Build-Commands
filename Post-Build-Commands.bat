@@ -1,12 +1,27 @@
 @echo off
 
-:: Disables ipv6 for all network adapters.
-    ::echo Disabling ipv6
-    ::reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters" /v DisabledComponents /t REG_DWORD /d 0xFFFFFFFF /f 
-    ::echo.
 
+::                                   _    _      _                             _                              _____           _       _    
+::                                  | |  | |    | |                           | |                            /  ___|         (_)     | |   
+::                                  | |  | | ___| | ___ ___  _ __ ___   ___   | |_ ___     _ __ ___  _   _   \ `--.  ___ _ __ _ _ __ | |_  
+::                                  | |/\| |/ _ \ |/ __/ _ \| '_ ` _ \ / _ \  | __/ _ \   | '_ ` _ \| | | |   `--. \/ __| '__| | '_ \| __| 
+::                                  \  /\  /  __/ | (_| (_) | | | | | |  __/  | || (_) |  | | | | | | |_| |  /\__/ / (__| |  | | |_) | |_  
+::                                   \/  \/ \___|_|\___\___/|_| |_| |_|\___|   \__\___/   |_| |_| |_|\__, |  \____/ \___|_|  |_| .__/ \__| 
+::                                                                                                    __/ |                    | |         
+::                                                                                                   |___/                     |_|         
+
+
+
+
+::Disables ipv6 for all network adapters.
+::echo Disabling ipv6
+::reg add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters" /v DisabledComponents /t REG_DWORD /d 0xFFFFFFFF /f 
+::echo.
+::timeout /t 3 /nobreak > nul
+
+::Only use the above if ipv6 is an issue. In the past only OPP needed to disable ipv6 but this can be used for anything that needs ipv6 disabled.
         
-        ::timeout /t 3 /nobreak > nul
+        
 
     echo.
     echo.
