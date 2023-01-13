@@ -20,7 +20,20 @@
 ::timeout /t 3 /nobreak > nul
 
 ::Only use the above if ipv6 is an issue. In the past only OPP needed to disable ipv6 but this can be used for anything that needs ipv6 disabled.
-        
+
+
+:: <----------------------------------------------------------------------------------------------------------------------->
+:: | Add this line to script at some point to tell laptop to go to sleep when the lid is closed and using battery power    |
+:: | powercfg -setdcvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 1​  |
+:: <----------------------------------------------------------------------------------------------------------------------->
+
+
+:: <----------------------------------------------------------------------------------------------------------------------->
+:: | Add this line to script at some point to tell laptop to do nothing when the lid is closed and plugged into power      |
+:: | powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0 ​ |
+:: <----------------------------------------------------------------------------------------------------------------------->
+
+
         
 
     echo.
