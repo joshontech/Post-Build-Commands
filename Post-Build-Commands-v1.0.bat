@@ -137,10 +137,13 @@
     echo.
     echo.
 
-:: Sets screen and sleep timeout when using battery.
+:: The next two commands sets screen timeout and what the laptop does when closing the lid on battery power.
     echo 5 of 9
-    echo Setting PC sleep to 30 minutes when using battery power.
+    echo Setting PC sleep to 30 minutes and laptop to sleep when lid is closed while using battery power.
+:: Sets sleep timeout to 30 minutes when using battery power.
     powercfg /change standby-timeout-dc 30
+:: Sets laptop to go to sleep when closing the lid only on battery power.
+    powercfg -setdcvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 1
 
         timeout /t 3 /nobreak > nul
             CALL :ProgressMeter 41
@@ -181,10 +184,13 @@
     echo.
     echo.
 
-:: Sets screen and sleep timeout when plugged in.
+:: The next two commands disable both laptop sleep functions for timeout and closing the lid.
     echo 7 of 9
-    echo Disabling sleep.
+    echo Disabling all sleep functions while plugged into power.
+:: Sets sleep timeout to off.
     powercfg /change standby-timeout-ac 0
+:: Sets sleep to off when closing laptop lid.
+    powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0
 
         timeout /t 3 /nobreak > nul
             CALL :ProgressMeter 61
@@ -205,6 +211,7 @@
 
     echo 8 of 9
     echo Setting screen timeout to 1 hour when plugged into power.
+:: Sets screen timeout to one hour when plugged into power.
     powercfg /change monitor-timeout-ac 60
 
         timeout /t 3 /nobreak > nul
