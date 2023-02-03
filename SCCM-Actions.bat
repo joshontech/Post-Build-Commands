@@ -1,4 +1,6 @@
 @echo off
+quickEdit 2
+
 echo Starting Script.
 cls
 
