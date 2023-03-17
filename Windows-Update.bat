@@ -31,6 +31,9 @@ echo.
 echo Installing Windows Updates.
 powershell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose"
 
+echo No Reboot Needed.
+timeout /t 3 /nobreak > nul
+
 if %Powershell-Enabled-At-Start% == 1 (
     call
 ) else (
