@@ -1,5 +1,9 @@
 @echo off
 
+echo.
+echo Checking for 64 bit Dell Command Update...
+timeout /t 3 /nobreak > nul
+
 :: Sets the variable folder_path to the folder path of Dell Command Update.
 set "folder_path=C:\Program Files\Dell\CommandUpdate"
 
@@ -8,19 +12,21 @@ set "folder_path=C:\Program Files\Dell\CommandUpdate"
 :: If the folder path does exist than it skips to next command.
 if not exist "%folder_path%" (
     echo.
-    echo.  
     echo 64 bit Dell Command Update is not installed.
     echo Please install 64 bit Dell Command Update.
+    timeout /t 3 /nobreak > nul
     pause
     exit /b 1 
 )     else (
+        echo.
+        echo Dell Command Update is installed.
+        timeout /t 3 /nobreak > nul
         call
 )
 
 :: Change directory to the location of dcu-cli to execute the program.
 cd C:\Program Files\Dell\CommandUpdate
 
-echo.
 echo.
 echo Checking for and installing Dell updates.
 :: Command to run Dell Command Update to scan, download, and install needed updates.
