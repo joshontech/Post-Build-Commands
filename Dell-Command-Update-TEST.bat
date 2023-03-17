@@ -1,7 +1,11 @@
 @echo off
 
+:: Sets the variable folder_path to the folder path of Dell Command Update.
 set "folder_path=C:\Program Files\Dell\CommandUpdate"
 
+:: Checks if the folder path to Dell Command Update exists.
+:: If the folder path does not exist it prints the echo message below.
+:: If the folder path does exist than it skips to next command.
 if not exist "%folder_path%" (
     echo.
     echo.  
@@ -13,7 +17,7 @@ if not exist "%folder_path%" (
         call
 )
 
-:: Change directory to the location od dcu-cli to execute the program.
+:: Change directory to the location of dcu-cli to execute the program.
 cd C:\Program Files\Dell\CommandUpdate
 
 echo.
@@ -22,6 +26,9 @@ echo Checking for and installing Dell updates.
 :: Command to run Dell Command Update to scan, download, and install needed updates.
 dcu-cli /applyUpdates
 
+:: Checks for return code 500 which means the system is up to date.
+:: If the return code is 500 it prints the echo message below.
+:: If the return code is not 500 then it skips to the next command.
 if %errorlevel% == 500 (
    echo.
    echo. 
@@ -33,14 +40,18 @@ if %errorlevel% == 500 (
 )
   echo.
   echo.
+
+:: Prints the question below and checks to see if the variable choice is Y or N.
+:: If choice is Y than the computer restarts.
+:: IF chose is anything other than Y it will skip the restart command.
   set /p choice="Windows will need to restart. Would you like to restart Windows now? (Y/N) "
   if /i "%choice%"=="Y" (
-  shutdown -r -t 0
-) else (
-    echo.
-    echo.
-    echo Restart cancelled.
-    pause
+    shutdown -r -t 0
+)     else (
+        echo.
+        echo.
+        echo You may restart Windows at a later time.
+        pause
 )
 
 
