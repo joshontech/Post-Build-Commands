@@ -3,9 +3,10 @@
 echo.
 echo.
 echo Starting Script.
-cls
+
 
 powershell -command "if((Get-ExecutionPolicy ) -ne 'Unrestricted') {exit 1}"
+
 
 if %errorlevel% == 1 (
     powershell -Command "Set-ExecutionPolicy Unrestricted -Force"
@@ -31,8 +32,10 @@ echo.
 echo Installing Windows Updates.
 powershell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose"
 
+echo.
+echo.
 echo No Reboot Needed.
-timeout /t 3 /nobreak > nul
+timeout /t 5 /nobreak > nul
 
 if %Powershell-Enabled-At-Start% == 1 (
     call
