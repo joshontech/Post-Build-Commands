@@ -30,7 +30,6 @@ echo.
 echo.
 echo Installing Windows Updates.
 powershell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose"
-pause
 
 if %Powershell-Enabled-At-Start% == 1 (
     call
