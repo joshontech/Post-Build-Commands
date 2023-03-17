@@ -14,7 +14,6 @@ if not exist "%folder_path%" (
     echo.
     echo 64 bit Dell Command Update is not installed.
     echo Please install 64 bit Dell Command Update.
-    timeout /t 3 /nobreak > nul
     pause
     exit /b 1 
 )     else (
