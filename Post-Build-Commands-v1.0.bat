@@ -269,6 +269,7 @@ echo Script Complete!
 
 pause
 
+:: This is the function that creates the progress bar at the top of the cmd window
 :ProgressMeter
 SETLOCAL ENABLEDELAYEDEXPANSION
 SET ProgressPercent=%1
