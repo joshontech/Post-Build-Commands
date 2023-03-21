@@ -30,7 +30,7 @@ cls
 echo.
 echo.
 echo Installing Windows Updates.
-powershell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose {exit 2}"
+powershell -command "if((Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose).RequiresReboot { exit 2 }"
 
 echo.
 echo.
