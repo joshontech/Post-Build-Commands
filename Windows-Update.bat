@@ -30,12 +30,16 @@ cls
 echo.
 echo.
 echo Installing Windows Updates.
-powershell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose"
+powershell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose {exit 2}"
 
 echo.
 echo.
+if %errorlevel% == 2 (
 echo No Reboot Needed.
 timeout /t 5 /nobreak > nul
+) else ( 
+    call 
+)
 
 if %Powershell-Enabled-At-Start% == 1 (
     call
