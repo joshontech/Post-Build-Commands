@@ -8,11 +8,11 @@ echo Starting Script.
 powershell -command "if((Get-ExecutionPolicy ) -ne 'Unrestricted') {exit 1}"
 
 
-if %errorlevel% == 1 (
+if %errorlevel%==1 (
     powershell -Command "Set-ExecutionPolicy Unrestricted -Force"
     set Powershell-Enabled-At-Start=0
-)       else ( 
-            set Powershell-Enabled-At-Start=1
+)  else ( 
+    set Powershell-Enabled-At-Start=1
 )
 
 powershell -command "Set-ExecutionPolicy Unrestricted -Force"
@@ -30,21 +30,23 @@ cls
 echo.
 echo.
 echo Installing Windows Updates.
-powershell -command "if((Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose).RequiresReboot {exit 2}"
+powershell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose"
 
-echo.
-echo.
-if %errorlevel% != 2 (
-    echo No Reboot Needed.
-    timeout /t 5 /nobreak > nul
-)       else %errorlevel% == 1 ( 
-            call
-)       else if %errorlevel% == 0 (
-            call
+:: Checking if Windows needs to be rebooted.
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired" >nul 2>&1
+if %errorlevel%==0 (
+    echo.
+    echo.
+    echo Reboot required to apply updates.
+) else (
+    echo.
+    echo.
+    echo No reboot required.
 )
 
-if %Powershell-Enabled-At-Start% == 1 (
+if %Powershell-Enabled-At-Start%==1 (
     call
 ) else (
     PowerShell -Command "Set-ExecutionPolicy Restricted -Force"
 )
+pause
