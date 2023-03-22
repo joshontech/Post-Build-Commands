@@ -12,7 +12,6 @@ if ($LASTEXITCODE -eq 1) {
     $env:PowershellEnabledAtStart = 1
 }
 
-Set-ExecutionPolicy Unrestricted -Force
 
 
 Install-PackageProvider -Name NuGet -Force
@@ -28,12 +27,6 @@ Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose
 
 
 
-
-
-
-
-
-
 WindowsUpdate = Get-WindowsUpdate
 if ($WindowsUpdate.RebootRequired) {
     Write-Host "A reboot is required."
@@ -41,7 +34,6 @@ if ($WindowsUpdate.RebootRequired) {
 else {
     Write-Host "A reboot is not required."
 }
-
 
 
 
@@ -57,5 +49,5 @@ if ($PowershellEnabledAtStart -eq 1) {
 Write-Host "Press any key to continue..."
 $null = Read-Host
 
-
+pause
 
