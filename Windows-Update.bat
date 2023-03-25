@@ -30,41 +30,59 @@ echo Installing Windows Updates.
 PowerShell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose -IgnoreReboot"
 cls
 
+echo %errorlevel%
+pause
+
 REM Checking if Windows needs to be rebooted.
-reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired" >nul
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired"
 cls
 
-if %errorlevel%==0 (
+if %errorlevel% equ 0 (
   set RebootRequired=1
 ) else (
+  call :PowerShell-ExecutionPolicy-Check
   echo.
   echo.
   echo No reboot is required.
   pause
+  call :DeleteNuGet
+  exit /b
 )
 
-if %RebootRequired%==1 (
+if %RebootRequired% equ 1 (
   echo.
   echo.
   echo Reboot is required after installing updates.
   set /p choice="Windows will need to restart. Would you like to restart Windows now? (Y/N) "
 )
-if /i "%choice%"=="Y" (
-      shutdown /r /t 0
-) else (
-    echo.
-    echo.
-    echo You may restart Windows at a later time.
-    pause     
+if /i "%choice%" equ "Y" (
+  call :PowerShell-ExecutionPolicy-Check
+  call :DeleteNuGet
+  shutdown /r /t 0
+  exit /b
+  
+)   else (
+      call :PowerShell-ExecutionPolicy-Check
+      echo.
+      echo.
+      echo You may restart Windows at a later time.
+      pause     
+      call :DeleteNuGet
+      exit /b
 ) 
 
-if %PowerShell-Enabled-At-Start%==1 (
+:PowerShell-ExecutionPolicy-Check
+if %PowerShell-Enabled-At-Start% equ 1 (
     call
 ) else (
     PowerShell -Command "Set-ExecutionPolicy Restricted -Force"
 )
+exit /b
 
-
-
-
-
+:DeleteNuget
+  cd C:\Program Files\
+  if exist PackageManagement (
+    rmdir /s /q PackageManagement
+ )   else (
+      call
+ )
