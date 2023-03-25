@@ -34,7 +34,7 @@ dcu-cli /applyUpdates
 :: Checks for return code 500 which means the system is up to date.
 :: If the return code is 500 it prints the echo message below.
 :: If the return code is not 500 then it skips to the next command.
-if %errorlevel% == 500 (
+if %errorlevel%==500 (
    echo.
    echo. 
    echo No updates needed.
