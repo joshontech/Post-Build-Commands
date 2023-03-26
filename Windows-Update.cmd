@@ -1,12 +1,6 @@
 @echo off
 
-echo.
-echo.
-echo Starting Script.
-
-
 PowerShell -command "if((Get-ExecutionPolicy ) -ne 'Unrestricted') {exit 1}"
-
 
 if %errorlevel%==1 (
     PowerShell -Command "Set-ExecutionPolicy Unrestricted -Force"
@@ -15,26 +9,28 @@ if %errorlevel%==1 (
     set PowerShell-Enabled-At-Start=1
 )
 
-PowerShell -command "Install-PackageProvider -Name NuGet -Force"
 cls
 
-PowerShell -command "Install-Module -Name PSWindowsUpdate -Force"
+set counter=0
+:loop
+if %counter% lss 3 (
+    echo.
+    echo.
+    echo Updates will start momentarilly...
+    PowerShell -command "Install-PackageProvider -Name NuGet -Force" -WindowStyle Hidden > nul
+    PowerShell -command "Install-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
+    PowerShell -command "Import-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
+    set /a counter+=1
+    
+)
+
 cls
 
-PowerShell -command "Import-Module -Name PSWindowsUpdate -Force"
-cls
-
-echo.
-echo.
-echo Installing Windows Updates.
 PowerShell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose -IgnoreReboot"
 cls
 
-echo %errorlevel%
-pause
-
 REM Checking if Windows needs to be rebooted.
-reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired"
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired" > nul
 cls
 
 if %errorlevel% equ 0 (
