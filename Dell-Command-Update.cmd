@@ -13,7 +13,7 @@ if %errorLevel% == 0 (
 
 :UACPrompt
 :: Elevate the script to run with administrator privileges
-powershell Start-Process -FilePath "%0" -Verb RunAs
+powershell -command "Start-Process -FilePath '%0' -Verb RunAs"
 exit /B
 
 :gotAdmin
