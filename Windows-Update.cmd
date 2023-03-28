@@ -1,26 +1,5 @@
 @echo off
 
-:: BatchGotAdmin
-:-------------------------------------
-:: Check if the script is running with administrator privileges
-net session >nul 2>&1
-if %errorLevel% == 0 (
-    goto :gotAdmin
-) else (
-    echo Requesting administrative privileges...
-    goto :UACPrompt
-)
-
-:UACPrompt
-:: Elevate the script to run with administrator privileges
-powershell Start-Process -FilePath "%0" -Verb RunAs
-exit /B
-
-:gotAdmin
-:: Continue with the script's main logic
-pushd "%~dp0"
-:--------------------------------------
-
 PowerShell -command "if((Get-ExecutionPolicy ) -ne 'Unrestricted') {exit 1}"
 
 if %errorlevel%==1 (
@@ -48,7 +27,7 @@ if %counter% lss 3 (
 cls
 
 PowerShell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose -IgnoreReboot"
-cls
+pause
 
 REM Checking if Windows needs to be rebooted.
 reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired" > nul
