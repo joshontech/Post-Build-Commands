@@ -27,6 +27,7 @@ if %counter% lss 3 (
 cls
 
 PowerShell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose -IgnoreReboot"
+echo.
 pause
 
 REM Checking if Windows needs to be rebooted.
