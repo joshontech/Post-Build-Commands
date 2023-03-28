@@ -33,28 +33,6 @@
 :: | powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0 ​ |
 :: <----------------------------------------------------------------------------------------------------------------------->
 
-:: BatchGotAdmin
-:-------------------------------------
-:: Check if the script is running with administrator privileges
-net session >nul 2>&1
-if %errorLevel% == 0 (
-    goto :gotAdmin
-) else (
-    echo Requesting administrative privileges...
-    goto :UACPrompt
-)
-
-:UACPrompt
-:: Elevate the script to run with administrator privileges
-powershell Start-Process -FilePath "%0" -Verb RunAs
-exit /B
-
-:gotAdmin
-:: Continue with the script's main logic
-pushd "%~dp0"
-:--------------------------------------
-        
-
     echo.
     echo.
     echo.
