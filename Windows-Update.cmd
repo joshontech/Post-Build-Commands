@@ -32,27 +32,30 @@ if %errorlevel%==1 (
 
 cls
 
-set counter=0
-:loop
-if %counter% lss 3 (
-    echo.
-    echo.
-    echo Updates will start momentarilly...
-    PowerShell -command "Install-PackageProvider -Name NuGet -Force" -WindowStyle Hidden > nul
-    PowerShell -command "Install-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
-    PowerShell -command "Import-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
-    set /a counter+=1
+
+echo.
+echo.
+echo Updates will start momentarilly...
+PowerShell -command "Install-PackageProvider -Name NuGet -Force" -WindowStyle Hidden > nul
+PowerShell -command "Install-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
+PowerShell -command "Import-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
     
-)
 
 cls
 
-PowerShell -command "Get-WindowsUpdate -Install -MicrosoftUpdate -AcceptAll -Verbose -IgnoreReboot"
-cls
+PowerShell -command "Get-WindowsUpdate -Install -AcceptAll -Verbose -IgnoreReboot"
+
 
 REM Checking if Windows needs to be rebooted.
-reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired" > nul
-cls
+reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired" >nul 2>&1
+if %errorlevel% equ 0 (
+    exit /b 1
+)
+
+reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations" >nul 2>&1
+if %errorlevel% equ 0 (
+    exit /b 1
+)
 
 if %errorlevel% equ 0 (
   set RebootRequired=1
