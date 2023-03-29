@@ -21,8 +21,6 @@ exit /B
 pushd "%~dp0"
 :--------------------------------------
 
-quickEdit 2
-
 echo Starting Script.
 cls
 
