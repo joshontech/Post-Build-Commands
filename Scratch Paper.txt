@@ -1,0 +1,3 @@
+PowerShell -command "Install-PackageProvider -Name NuGet -Force" -WindowStyle Hidden > nul
+PowerShell -command "Install-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
+PowerShell -command "Import-Module -Name PSWindowsUpdate -Force" -WindowStyle Hidden > nul
