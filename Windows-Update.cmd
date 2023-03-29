@@ -57,12 +57,12 @@ if %errorlevel% equ 0 (
   set RebootRequired=1
 ) else (
     call :PowerShell-ExecutionPolicy-Check
-    call :UninstallModule
-    call :DeleteNuGet
     echo.
     echo.
     echo No reboot is required.
     pause
+    call :UninstallModule
+    call :DeleteNuGet
     exit /b
 )
 
@@ -81,12 +81,12 @@ if /i "%choice%" equ "Y" (
   
 ) else (
     call :PowerShell-ExecutionPolicy-Check
-    call :UninstallModule
-    call :DeleteNuGet
     echo.
     echo.
     echo You may restart Windows at a later time.
     pause
+    call :UninstallModule
+    call :DeleteNuGet
     exit /b
 ) 
 
@@ -101,11 +101,12 @@ if /i "%choice%" equ "Y" (
 exit /b
 
 :DeleteNuget
-  cd C:\Program Files\PackageManagement\ProviderAssemblies
-  if exist nuget (
-     rmdir /s /q nuget
-     exit /b
-  )
+  cd C:\Program Files\
+  if exist PackageManagement (
+    rmdir /s /q PackageManagement
+ )   else (
+      call
+ )
 
 :UninstallModule
   PowerShell -command "Uninstall-Module -Name PSWindowsUpdate -Force" > nul 2>&1
