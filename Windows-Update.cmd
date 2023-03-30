@@ -35,8 +35,8 @@ cls
 echo.
 echo Updates will start momentarilly...
 PowerShell -command "Install-PackageProvider -Name NuGet -Force" > nul 2>&1
-PowerShell -command "Install-Module -Name PSWindowsUpdate -Force" > nul 2>&1
-PowerShell -command "Import-Module -Name PSWindowsUpdate -Force" > nul 2>&1
+PowerShell -command "Install-Module -Name PSWindowsUpdate -Force"
+PowerShell -command "Import-Module -Name PSWindowsUpdate -Force"
 cls
 
 PowerShell -command "Get-WindowsUpdate -Install -AcceptAll -Verbose -IgnoreReboot"
@@ -57,12 +57,12 @@ if %errorlevel% equ 0 (
   set RebootRequired=1
 ) else (
     call :PowerShell-ExecutionPolicy-Check
+    call :UninstallModule
+    call :DeleteNuGet "C:\Program Files\PackageManagement"
     echo.
     echo.
     echo No reboot is required.
     pause
-    call :UninstallModule
-    call :DeleteNuGet
     exit /b
 )
 
@@ -75,18 +75,18 @@ if %RebootRequired% equ 1 (
 if /i "%choice%" equ "Y" (
   call :PowerShell-ExecutionPolicy-Check
   call :UninstallModule
-  call :DeleteNuGet
+  call :DeleteNuGet "C:\Program Files\PackageManagement"
   shutdown /r /t 0
   exit /b
   
 ) else (
     call :PowerShell-ExecutionPolicy-Check
+    call :UninstallModule
+    call :DeleteNuGet "C:\Program Files\PackageManagement"
     echo.
     echo.
     echo You may restart Windows at a later time.
     pause
-    call :UninstallModule
-    call :DeleteNuGet
     exit /b
 ) 
 
@@ -94,21 +94,22 @@ if /i "%choice%" equ "Y" (
 :---------------------------------------------------------------------------
 :PowerShell-ExecutionPolicy-Check                                          
   if %PowerShell-Enabled-At-Start% equ 1 (
-    call
+    exit /b
 ) else (
     PowerShell -Command "Set-ExecutionPolicy Restricted -Force"
+    exit /b
 )
-exit /b
 
 :DeleteNuget
-  cd C:\Program Files\
-  if exist PackageManagement (
-    rmdir /s /q PackageManagement
- )   else (
-      call
- )
+setlocal
+set folder=%~1
+
+if exist "%folder%" (
+  rmdir /s /q "%folder%"
+)
+endlocal
+goto :eof
 
 :UninstallModule
   PowerShell -command "Uninstall-Module -Name PSWindowsUpdate -Force" > nul 2>&1
-  exit /b
 :----------------------------------------------------------------------------
