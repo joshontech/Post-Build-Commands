@@ -35,7 +35,7 @@ cls
 echo.
 echo Updates will start momentarilly...
 PowerShell -command "Install-PackageProvider -Name NuGet -Force" > nul 2>&1
-PowerShell -command "Install-Module -Name PSWindowsUpdate -Force"
+PowerShell -command "Install-Module -Name PSWindowsUpdate -RequiredVersion 2.2.0.3 -Force"
 PowerShell -command "Import-Module -Name PSWindowsUpdate -Force"
 cls
 
