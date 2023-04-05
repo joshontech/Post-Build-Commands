@@ -50,7 +50,7 @@ cd C:\Program Files\Dell\CommandUpdate
 echo.
 echo Checking for and installing Dell updates.
 :: Command to run Dell Command Update to scan, download, and install needed updates.
-dcu-cli /applyUpdates
+.\dcu-cli.exe /applyUpdates
 
 :: Checks for return code 500 which means the system is up to date.
 :: If the return code is 500 it prints the echo message below.

@@ -21,15 +21,17 @@ exit /B
 pushd "%~dp0"
 :----------------------------------------------------------------
 
-PowerShell -command "if((Get-ExecutionPolicy ) -ne 'Unrestricted') {exit 1}"
+PowerShell -command "if((Get-ExecutionPolicy ) -eq 'Restricted') {exit 1}"
 
-if %errorlevel%==1 (
+if %errorlevel% == 1 (
     PowerShell -Command "Set-ExecutionPolicy Unrestricted -Force"
     set PowerShell-Enabled-At-Start=0
 )  else ( 
     set PowerShell-Enabled-At-Start=1
 )
 
+echo %PowerShell-Enabled-At-Start%
+pause
 cls
 
 echo.
@@ -39,50 +41,52 @@ PowerShell -command "Install-Module -Name PSWindowsUpdate -RequiredVersion 2.2.0
 PowerShell -command "Import-Module -Name PSWindowsUpdate -Force"
 cls
 
-PowerShell -command "Get-WindowsUpdate -Install -AcceptAll -Verbose -IgnoreReboot"
+PowerShell -command "Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose "
+
+PowerShell -command "Uninstall-Module -Name PSWindowsUpdate -Force"
+
+call :PowerShell-ExecutionPolicy-Check
+call :DeleteNuget
 
 :: Checking if Windows needs to be rebooted.
 reg query "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired" > nul 2>&1
-if %errorlevel% equ 0 (
-    exit /b 1
+if %errorlevel% == 0 (
+    set endgame=1
+) else (
+    set endgame=0
 )
 
 :: Checking if Windows needs to be rebooted.
 reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\PendingFileRenameOperations" > nul 2>&1
-if %errorlevel% equ 0 (
-    exit /b 1
-)
-
-if %errorlevel% equ 0 (
-  set RebootRequired=1
+if %errorlevel% == 0 (
+    set endgame=1
 ) else (
-    call :PowerShell-ExecutionPolicy-Check
-    call :UninstallModule
-    call :DeleteNuGet "C:\Program Files\PackageManagement"
-    echo.
-    echo.
-    echo No reboot is required.
-    pause
-    exit /b
+    set endgame=0
 )
 
-if %RebootRequired% equ 1 (
+echo %endgame%
+pause
+
+if %endgame% == 1 (
+  set RebootRequired=1
+) else if %endgame% == 0 (
+  echo.
+  echo.
+  echo No reboot is required.
+  pause
+  exit /b
+)
+
+if %RebootRequired% == 1 (
   echo.
   echo.
   echo Reboot is required after installing updates.
   set /p choice="Windows will need to restart. Would you like to restart Windows now? (Y/N) "
 )
-if /i "%choice%" equ "Y" (
-  call :PowerShell-ExecutionPolicy-Check
-  call :UninstallModule
-  call :DeleteNuGet "C:\Program Files\PackageManagement"
+if /i "%choice%" == "Y" (
   shutdown /r /t 0
   exit /b
-  
 ) else (
-    call :PowerShell-ExecutionPolicy-Check
-    call :UninstallModule
-    call :DeleteNuGet "C:\Program Files\PackageManagement"
     echo.
     echo.
     echo You may restart Windows at a later time.
@@ -92,8 +96,12 @@ if /i "%choice%" equ "Y" (
 
 :: Functions
 :---------------------------------------------------------------------------
+:UninstallModule
+  PowerShell -command "Uninstall-Module -Name PSWindowsUpdate -Force" > nul 2>&1
+  exit /b
+  
 :PowerShell-ExecutionPolicy-Check                                          
-  if %PowerShell-Enabled-At-Start% equ 1 (
+  if %PowerShell-Enabled-At-Start% == 1 (
     exit /b
 ) else (
     PowerShell -Command "Set-ExecutionPolicy Restricted -Force"
@@ -101,15 +109,11 @@ if /i "%choice%" equ "Y" (
 )
 
 :DeleteNuget
-setlocal
-set folder=%~1
+  setlocal
+  set folder=C:\Program Files\PackageManagement
 
-if exist "%folder%" (
-  rmdir /s /q "%folder%"
-)
-endlocal
-goto :eof
-
-:UninstallModule
-  PowerShell -command "Uninstall-Module -Name PSWindowsUpdate -Force" > nul 2>&1
+  if exist "%folder%" (
+    rmdir /s /q "%folder%"
+    exit /b
+  )
 :----------------------------------------------------------------------------
