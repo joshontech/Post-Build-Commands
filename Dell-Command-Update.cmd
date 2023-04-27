@@ -36,12 +36,12 @@ if not exist "%folder_path%" (
     echo 64 bit Dell Command Update is not installed.
     echo Please install 64 bit Dell Command Update.
     pause
-    exit /b 1 
+    call
 )     else (
         echo.
         echo Dell Command Update is installed.
         timeout /t 3 /nobreak > nul
-        exit /b 1
+        call
 )
 
 :: Change directory to the location of dcu-cli to execute the program.
@@ -50,6 +50,10 @@ cd C:\Program Files\Dell\CommandUpdate
 echo.
 echo Checking for and installing Dell updates.
 :: Command to run Dell Command Update to scan, download, and install needed updates.
+.\dcu-cli.exe /driverInstall
+
+.\dcu-cli.exe /scan
+
 .\dcu-cli.exe /applyUpdates
 
 :: Checks for return code 500 which means the system is up to date.
@@ -62,7 +66,7 @@ if %errorlevel%==500 (
    pause
    goto :EOF
 )   else (
-      exit /b 1
+      call
 )
   echo.
   echo.
