@@ -31,8 +31,7 @@ PowerShell -command "Import-Module -Name PSWindowsUpdate -Force"
 cls
 
 PowerShell -command "Get-WindowsUpdate -Install -AcceptAll -Verbose"
-pause
-cls
+timeout /t 5 /nobreak > nul
 
 echo.
 echo.

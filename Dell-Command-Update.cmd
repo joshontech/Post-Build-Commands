@@ -41,7 +41,7 @@ if not exist "%folder_path%" (
         echo.
         echo Dell Command Update is installed.
         timeout /t 3 /nobreak > nul
-        call
+        exit /b 1
 )
 
 :: Change directory to the location of dcu-cli to execute the program.
@@ -62,12 +62,12 @@ if %errorlevel%==500 (
    pause
    goto :EOF
 )   else (
-      call
+      exit /b 1
 )
   echo.
   echo.
 
-:: Prints the question below and checks to see if the variable choice is Y or N.
+:: Prints the question below and checks to see if the variable choice is Y.
 :: If choice is Y than the computer restarts.
 :: IF chose is anything other than Y it will skip the restart command.
   set /p choice="Windows will need to restart. Would you like to restart Windows now? (Y/N) "

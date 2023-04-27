@@ -41,7 +41,7 @@ PowerShell -command "Install-Module -Name PSWindowsUpdate -RequiredVersion 2.2.0
 PowerShell -command "Import-Module -Name PSWindowsUpdate -Force"
 cls
 
-PowerShell -command "Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose "
+PowerShell -command "Get-WindowsUpdate -Install -AcceptAll -IgnoreReboot -Verbose"
 
 PowerShell -command "Uninstall-Module -Name PSWindowsUpdate -Force"
 
