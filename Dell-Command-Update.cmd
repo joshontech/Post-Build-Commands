@@ -50,11 +50,19 @@ cd C:\Program Files\Dell\CommandUpdate
 echo.
 echo Checking for and installing Dell updates.
 :: Command to run Dell Command Update to scan, download, and install needed updates.
-.\dcu-cli.exe /driverInstall
+if not exist "DCU-Driver-Package-installed.txt" (
+  .\dcu-cli.exe /driverInstall
+  break>DCU-Driver-Package-installed.txt
+) else (
+    .\dcu-cli.exe /scan
+    .\dcu-cli.exe /applyUpdates
+)
 
-.\dcu-cli.exe /scan
+:: .\dcu-cli.exe /driverInstall
 
-.\dcu-cli.exe /applyUpdates
+:: .\dcu-cli.exe /scan
+
+:: .\dcu-cli.exe /applyUpdates
 
 :: Checks for return code 500 which means the system is up to date.
 :: If the return code is 500 it prints the echo message below.
@@ -65,9 +73,20 @@ if %errorlevel%==500 (
    echo No updates needed.
    pause
    goto :EOF
-)   else (
-      call
+)   else if %errorlevel%==0 (
+      echo.
+      echo.
+      echo No updates needed.
+      pause
+      goto :EOF
+)   else if %errorlevel%==3003 (
+      echo.
+      echo.
+      echo The Dell Client Management Service is busy. Please wait for it to finish or kill the process and run this script again.
+      pause
+      goto :EOF
 )
+
   echo.
   echo.
 
