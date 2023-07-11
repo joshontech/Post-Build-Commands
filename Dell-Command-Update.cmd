@@ -34,8 +34,10 @@ set "folder_path=C:\Program Files\Dell\CommandUpdate"
 if not exist "%folder_path%" (
     echo.
     echo 64 bit Dell Command Update is not installed.
-    echo Please install 64 bit Dell Command Update.
-    pause
+    echo.
+    echo Please wait, installing Dell Command Update now...
+    .\DCU-4.8.exe /s
+    cls
     call
 )     else (
         echo.
@@ -58,15 +60,9 @@ if not exist "DCU-Driver-Package-installed.txt" (
     .\dcu-cli.exe /applyUpdates
 )
 
-:: .\dcu-cli.exe /driverInstall
-
-:: .\dcu-cli.exe /scan
-
-:: .\dcu-cli.exe /applyUpdates
-
 :: Checks for return code 500 which means the system is up to date.
-:: If the return code is 500 it prints the echo message below.
-:: If the return code is not 500 then it skips to the next command.
+:: If the return code is 500 or 0 (both meaning no updates needed) it prints the echo message below.
+:: If the return code is not 500 or 0 then it skips to the next command.
 if %errorlevel%==500 (
    echo.
    echo. 
@@ -79,6 +75,7 @@ if %errorlevel%==500 (
       echo No updates needed.
       pause
       goto :EOF
+:: Sometimes DCU gets stuck and displays error 3003 (Dell client management service is busy). In this case it needs to be force quit and re-ran.
 )   else if %errorlevel%==3003 (
       echo.
       echo.
