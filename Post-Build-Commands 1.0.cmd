@@ -24,16 +24,36 @@
 
 :: <----------------------------------------------------------------------------------------------------------------------->
 :: | Add this line to script at some point to tell laptop to go to sleep when the lid is closed and using battery power    |
-:: | powercfg -setdcvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 1​  |
+:: | powercfg -setdcvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 1  |
 :: <----------------------------------------------------------------------------------------------------------------------->
 
 
 :: <----------------------------------------------------------------------------------------------------------------------->
 :: | Add this line to script at some point to tell laptop to do nothing when the lid is closed and plugged into power      |
-:: | powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0 ​ |
+:: | powercfg -setacvalueindex SCHEME_CURRENT 4f971e89-eebd-4455-a8de-9e59040e7347 5ca83367-6e45-459f-a27b-476b1d01c936 0  |
 :: <----------------------------------------------------------------------------------------------------------------------->
 
 
+:: BatchGotAdmin
+:-------------------------------------
+:: Check if the script is running with administrator privileges
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    goto :gotAdmin
+) else (
+    echo Requesting administrative privileges...
+    goto :UACPrompt
+)
+
+:UACPrompt
+:: Elevate the script to run with administrator privileges
+powershell -command "Start-Process -FilePath '%0' -Verb RunAs"
+exit /B
+
+:gotAdmin
+:: Continue with the script's main logic
+pushd "%~dp0"
+:--------------------------------------
         
 
     echo.
