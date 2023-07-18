@@ -1,5 +1,25 @@
 @echo off
-quickEdit 2
+
+:: BatchGotAdmin
+:-------------------------------------
+:: Check if the script is running with administrator privileges
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    goto :gotAdmin
+) else (
+    echo Requesting administrative privileges...
+    goto :UACPrompt
+)
+
+:UACPrompt
+:: Elevate the script to run with administrator privileges
+powershell -command "Start-Process -FilePath '%0' -Verb RunAs"
+exit /B
+
+:gotAdmin
+:: Continue with the script's main logic
+pushd "%~dp0"
+:--------------------------------------
 
 echo Starting Script.
 cls
